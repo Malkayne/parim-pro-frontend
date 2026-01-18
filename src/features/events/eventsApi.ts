@@ -142,3 +142,89 @@ export async function addEventRole(
   const res = await http.post<AddRoleResponse>(`/api/events/${eventId}/roles`, input);
   return res.data.data.role;
 }
+
+type UpdateEventResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    event: Event;
+  };
+};
+
+export async function updateEvent(eventId: string, input: Partial<CreateEventInput>) {
+  const res = await http.patch<UpdateEventResponse>(`/api/events/${eventId}`, input);
+  return res.data.data.event;
+}
+
+type UpdateRoleResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    role: EventRole;
+  };
+};
+
+export async function updateEventRole(
+  roleId: string,
+  input: { roleName: string; price: number; capacity: number; duration?: string; roleDescription?: string },
+) {
+  const res = await http.patch<UpdateRoleResponse>(`/api/events/roles/${roleId}`, input);
+  return res.data.data.role;
+}
+
+export async function deleteEventRole(roleId: string) {
+  const res = await http.delete<{ success: boolean; message: string }>(`/api/events/roles/${roleId}`);
+  return res.data;
+}
+
+export type ParticipantStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
+
+export type Participant = {
+  _id: string;
+  user: {
+    _id: string;
+    fullName: string;
+    mail: string;
+    phoneNumber?: string;
+  };
+  event: string;
+  role: EventRole;
+  status: ParticipantStatus;
+  appliedAt: string;
+};
+
+type ListParticipantsResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    participants: Participant[];
+  };
+};
+
+export async function listParticipants(eventId: string) {
+  const res = await http.get<ListParticipantsResponse>(`/api/events/${eventId}/participants`);
+  return res.data.data.participants;
+}
+
+type ParticipantActionResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    participant: Participant;
+  };
+};
+
+export async function approveParticipant(participantId: string) {
+  const res = await http.patch<ParticipantActionResponse>(`/api/events/participants/${participantId}/approve`);
+  return res.data.data.participant;
+}
+
+export async function rejectParticipant(participantId: string, reason?: string) {
+  const res = await http.patch<ParticipantActionResponse>(`/api/events/participants/${participantId}/reject`, { reason });
+  return res.data.data.participant;
+}
+
+export async function changeParticipantRole(participantId: string, roleId: string) {
+  const res = await http.patch<ParticipantActionResponse>(`/api/events/participants/${participantId}/role`, { roleId });
+  return res.data.data.participant;
+}
