@@ -11,9 +11,10 @@ export function DashboardPage() {
     <div className="space-y-4">
       <PageHeader
         title="Dashboard"
+        hideHeader={true}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dashboard' }]}
         banner={
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-xl border border-border bg-card p-6 bg-primary/10">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <div className="text-sm text-muted-foreground">Welcome back</div>
