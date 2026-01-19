@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Badge } from 'src/components/ui/badge'
 import { Button } from 'src/components/ui/button'
@@ -16,7 +16,6 @@ import {
   updateEventRole,
   deleteEventRole,
   listParticipants,
-  changeParticipantRole,
   approveParticipant,
   rejectParticipant,
   type EventStatus,
@@ -25,8 +24,8 @@ import { AttendanceView } from 'src/features/attendance/AttendanceView'
 import { AddRoleDialog } from 'src/features/events/AddRoleDialog'
 import { EditRoleDialog } from 'src/features/events/EditRoleDialog'
 import { EditEventDialog } from 'src/features/events/EditEventDialog'
-import { ChangeParticipantRoleDialog } from 'src/features/events/ChangeParticipantRoleDialog'
 import { ConfirmDialog } from 'src/features/events/ConfirmDialog'
+import { PaymentsView } from 'src/features/payments/PaymentsView'
 
 function statusVariant(status: EventStatus) {
   if (status === 'published') return 'success'
@@ -42,7 +41,15 @@ export function EventDetailsPage() {
 
   const [roleOpen, setRoleOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('overview')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeTab = searchParams.get('tab') || 'overview'
+
+  const setActiveTab = (tab: string) => {
+    setSearchParams(prev => {
+      prev.set('tab', tab)
+      return prev
+    })
+  }
 
   // Edit Event State
   const [editEventOpen, setEditEventOpen] = useState(false)
@@ -51,8 +58,6 @@ export function EventDetailsPage() {
   const [editingRole, setEditingRole] = useState<any>(null)
   const [deletingRoleId, setDeletingRoleId] = useState<string | null>(null)
 
-  // Participant Actions State
-  const [changingRoleParticipant, setChangingRoleParticipant] = useState<any>(null)
 
   const { data: event, isLoading, isError, error } = useQuery({
     queryKey: ['event', uniqueId],
@@ -139,18 +144,6 @@ export function EventDetailsPage() {
     },
   })
 
-  const changeParticipantRoleMutation = useMutation({
-    mutationFn: ({ participantId, roleId }: { participantId: string; roleId: string }) =>
-      changeParticipantRole(participantId, roleId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['event-participants', event?._id] })
-      toast({ title: 'Participant role updated', variant: 'success' })
-      setChangingRoleParticipant(null)
-    },
-    onError: (err) => {
-      toast({ title: 'Update failed', description: err instanceof Error ? err.message : undefined, variant: 'error' })
-    },
-  })
 
   const participantActionMutation = useMutation({
     mutationFn: ({ id, action, reason }: { id: string; action: 'approve' | 'reject'; reason?: string }) =>
@@ -217,6 +210,7 @@ export function EventDetailsPage() {
           <TabsTrigger value="roles">Roles</TabsTrigger>
           <TabsTrigger value="participants">Participants</TabsTrigger>
           <TabsTrigger value="attendance">Attendance</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 pt-4">
@@ -402,9 +396,6 @@ export function EventDetailsPage() {
                                 </Button>
                               </>
                             )}
-                            <Button size="sm" variant="outline" onClick={() => setChangingRoleParticipant(p)}>
-                              Change Role
-                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -418,6 +409,10 @@ export function EventDetailsPage() {
 
         <TabsContent value="attendance" className="space-y-4 pt-4">
           <AttendanceView eventId={String(event?._id)} />
+        </TabsContent>
+
+        <TabsContent value="payments" className="space-y-4 pt-4">
+          <PaymentsView eventId={String(event?._id)} />
         </TabsContent>
       </Tabs>
 
@@ -465,16 +460,6 @@ export function EventDetailsPage() {
         }}
       />
 
-      <ChangeParticipantRoleDialog
-        open={Boolean(changingRoleParticipant)}
-        participant={changingRoleParticipant}
-        roles={event?.roles ?? []}
-        submitting={changeParticipantRoleMutation.isPending}
-        onClose={() => setChangingRoleParticipant(null)}
-        onSubmit={async (participantId, roleId) => {
-          await changeParticipantRoleMutation.mutateAsync({ participantId, roleId })
-        }}
-      />
 
       <ConfirmDialog
         open={Boolean(deletingRoleId)}
