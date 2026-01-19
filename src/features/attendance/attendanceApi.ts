@@ -41,8 +41,22 @@ export async function deleteQR(qrId: string) {
 }
 
 export type LiveAttendanceStats = {
-    totalCheckedIn: number;
-    recentCheckIns: Array<{
+    eventId: string;
+    eventTitle: string;
+    summary: {
+        totalApproved: number;
+        assigned: number;
+        checkedIn: number;
+        active: number;
+        completed: number;
+        absent: number;
+    };
+    percentages: {
+        attendance: number;
+        completion: number;
+    };
+    lastUpdated: string;
+    recentCheckIns?: Array<{
         attendanceId: string;
         staff: {
             fullName: string;
@@ -70,6 +84,7 @@ export type AttendanceRecord = {
         id: string;
         fullName: string;
         email: string;
+        mail?: string; // Standardized back-end field
         phoneNumber?: string;
     } | null;
     role: string;
@@ -82,7 +97,7 @@ export type AttendanceRecord = {
         time: string;
         method: string;
     } | null;
-    duration?: number;
+    duration?: string;
     overridden?: boolean;
     notes?: string | null;
 };
@@ -90,14 +105,14 @@ export type AttendanceRecord = {
 type GetAttendanceDetailsResponse = {
     success: boolean;
     message: string;
-    pagination: {
-        total: number;
-        page: number;
-        limit: number;
-        pages: number;
-    };
     data: {
         attendances: AttendanceRecord[];
+        pagination: {
+            total: number;
+            page: number;
+            limit: number;
+            pages: number;
+        };
     };
 };
 
@@ -105,10 +120,20 @@ export async function getAttendanceDetails(eventId: string, params?: { status?: 
     const res = await http.get<GetAttendanceDetailsResponse>(`/api/attendance/admin/events/${eventId}/details`, {
         params,
     });
-    return res.data; // Return full object to access pagination
+    return res.data;
 }
 
 export type OverrideAction = 'CHECK_IN_OVERRIDE' | 'CHECK_OUT_OVERRIDE' | 'MARK_ABSENT' | 'STATUS_CHANGE';
+
+export type OverrideHistoryItem = {
+    overrideId: string;
+    action: OverrideAction;
+    reason: string;
+    performedBy: any;
+    before: any;
+    after: any;
+    timestamp: string;
+};
 
 export async function overrideAttendance(
     attendanceId: string,
@@ -118,5 +143,12 @@ export async function overrideAttendance(
         `/api/attendance/admin/${attendanceId}/override`,
         input,
     );
-    return res.data.data.attendance;
+    return res.data.data;
+}
+
+export async function getOverrideHistory(attendanceId: string) {
+    const res = await http.get<{ success: boolean; data: { overrides: OverrideHistoryItem[] } }>(
+        `/api/attendance/admin/${attendanceId}/overrides`
+    );
+    return res.data.data.overrides;
 }

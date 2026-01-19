@@ -30,7 +30,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
     const item: ToastItem = {
       id,
       variant: input.variant ?? 'default',
-      durationMs: input.durationMs ?? 3500,
+      durationMs: input.durationMs ?? 5500,
       title: input.title,
       description: input.description,
     }
@@ -53,8 +53,8 @@ export function ToastProvider({ children }: PropsWithChildren) {
             key={t.id}
             className={cn(
               'rounded-xl border border-border bg-card px-4 py-3 shadow-md',
-              t.variant === 'success' && 'border-success/40',
-              t.variant === 'error' && 'border-error/40',
+              t.variant === 'success' && 'border-success/40 bg-success/30',
+              t.variant === 'error' && 'border-error/40 bg-error/30',
             )}
           >
             <div className="text-sm font-semibold text-foreground">{t.title}</div>

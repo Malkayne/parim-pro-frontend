@@ -213,9 +213,10 @@ type ListParticipantsResponse = {
 
 export async function listParticipants(eventId: string) {
   const res = await http.get<ListParticipantsResponse>(`/api/events/${eventId}/participants`);
-  const grouped = res.data.data.participants;
+  const { summary, participants: grouped } = res.data.data;
   // Flatten the grouped object into a single array
-  return Object.values(grouped).flat();
+  const flattened = Object.values(grouped).flat();
+  return { summary, participants: flattened };
 }
 
 type ParticipantActionResponse = {

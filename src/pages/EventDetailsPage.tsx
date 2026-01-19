@@ -205,7 +205,7 @@ export function EventDetailsPage() {
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 lg:w-[700px]">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="roles">Roles</TabsTrigger>
           <TabsTrigger value="participants">Participants</TabsTrigger>
@@ -309,11 +309,11 @@ export function EventDetailsPage() {
                   <tbody className="divide-y">
                     {event.roles?.map((r) => (
                       <tr key={r._id ?? r.roleName} className="hover:bg-muted">
-                        <td className="px-4 py-3 font-medium">{r.roleName}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{r.price}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{r.capacity}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{r.duration ?? '—'}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{r.roleDescription ?? '—'}</td>
+                        <td className="px-4 py-3 font-medium text-nowrap">{r.roleName}</td>
+                        <td className="px-4 py-3 text-muted-foreground text-nowrap">{r.price}</td>
+                        <td className="px-4 py-3 text-muted-foreground text-nowrap">{r.capacity}</td>
+                        <td className="px-4 py-3 text-muted-foreground text-nowrap">{r.duration ?? '—'}</td>
+                        <td className="px-4 py-3 text-muted-foreground text-nowrap">{r.roleDescription ?? '—'}</td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex justify-end gap-2">
                             <Button size="sm" variant="outline" onClick={() => setEditingRole(r)}>Edit</Button>
@@ -330,15 +330,37 @@ export function EventDetailsPage() {
         </TabsContent>
 
         <TabsContent value="participants" className="space-y-4 pt-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+            <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
+              <div className="text-xs text-muted-foreground uppercase font-medium">Total</div>
+              <div className="text-xl font-bold">{participants?.summary?.total ?? 0}</div>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
+              <div className="text-xs text-muted-foreground uppercase font-medium text-warning">Applied</div>
+              <div className="text-xl font-bold">{participants?.summary?.applied ?? 0}</div>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
+              <div className="text-xs text-muted-foreground uppercase font-medium text-success">Approved</div>
+              <div className="text-xl font-bold">{participants?.summary?.approved ?? 0}</div>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
+              <div className="text-xs text-muted-foreground uppercase font-medium text-error">Rejected</div>
+              <div className="text-xl font-bold">{participants?.summary?.rejected ?? 0}</div>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
+              <div className="text-xs text-muted-foreground uppercase font-medium text-gray-500">Cancelled</div>
+              <div className="text-xl font-bold">{participants?.summary?.cancelled ?? 0}</div>
+            </div>
+          </div>
+
           <div className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
-              <div className="text-sm font-medium">Participants</div>
-              <div className="text-xs text-muted-foreground">Total: {participants?.length ?? 0}</div>
+              <div className="text-sm font-medium">Participant List</div>
             </div>
 
             {participantsLoading ? (
               <div className="p-4 text-sm text-muted-foreground">Loading participants...</div>
-            ) : (participants?.length ?? 0) === 0 ? (
+            ) : (participants?.participants?.length ?? 0) === 0 ? (
               <div className="p-4 text-sm text-muted-foreground">No participants found.</div>
             ) : (
               <div className="overflow-x-auto">
@@ -353,7 +375,7 @@ export function EventDetailsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y">
-                    {participants?.map((p) => (
+                    {participants?.participants?.map((p) => (
                       <tr key={p.participantId} className="hover:bg-muted">
                         <td className="px-4 py-3">
                           <div className="font-medium">{p.staff?.fullName ?? 'Unknown'}</div>

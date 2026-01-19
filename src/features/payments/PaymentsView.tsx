@@ -124,7 +124,7 @@ export function PaymentsView({ eventId }: PaymentsViewProps) {
                                     <th className="px-4 py-3 font-medium">Recipient</th>
                                     <th className="px-4 py-3 font-medium">Role</th>
                                     <th className="px-4 py-3 font-medium">Amount</th>
-                                    <th className="px-4 py-3 font-medium">Bank Details</th>
+                                    <th className="px-4 py-3 font-medium text-nowrap">Bank Details</th>
                                     <th className="px-4 py-3 font-medium">Status</th>
                                     <th className="px-4 py-3 font-medium text-right">Actions</th>
                                 </tr>
@@ -132,23 +132,24 @@ export function PaymentsView({ eventId }: PaymentsViewProps) {
                             <tbody className="divide-y">
                                 {filteredPayments.map((payment) => (
                                     <tr key={payment._id} className="hover:bg-muted/50 transition-colors">
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 text-nowrap">
                                             <div className="font-medium">{payment.staffName}</div>
                                             <div className="text-[10px] text-muted-foreground font-mono uppercase">{payment._id.slice(-6)}</div>
                                         </td>
-                                        <td className="px-4 py-3 text-muted-foreground">{payment.role}</td>
-                                        <td className="px-4 py-3 font-semibold">₦{parseFloat(payment.amount).toLocaleString()}</td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 text-muted-foreground text-nowrap">{payment.role}</td>
+                                        <td className="px-4 py-3 font-semibold text-nowrap">₦{parseFloat(payment.amount).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-nowrap">
                                             {payment.bankDetails ? (
                                                 <div className="text-xs">
-                                                    <div>{payment.bankDetails.bankName}</div>
-                                                    <div className="text-muted-foreground font-mono">{payment.bankDetails.accountNumber}</div>
+                                                    <div className="font-medium">{payment.bankDetails.bankName}</div>
+                                                    <div className="font-mono font-bold text-sm tracking-wider">{payment.bankDetails.accountNumber}</div>
+                                                    <div className="text-[10px] text-muted-foreground uppercase">{payment.bankDetails.accountName}</div>
                                                 </div>
                                             ) : (
                                                 <span className="text-xs text-error italic">No bank setup</span>
                                             )}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 text-nowrap">
                                             <Badge variant={
                                                 payment.status === 'paid' ? 'success' :
                                                     payment.status === 'approved' ? 'default' :
@@ -157,7 +158,7 @@ export function PaymentsView({ eventId }: PaymentsViewProps) {
                                                 {payment.status}
                                             </Badge>
                                         </td>
-                                        <td className="px-4 py-3 text-right">
+                                        <td className="px-4 py-3 text-right text-nowrap">
                                             <div className="flex justify-end gap-2">
                                                 {payment.status === 'calculated' && (
                                                     <Button

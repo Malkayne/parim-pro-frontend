@@ -127,21 +127,21 @@ export function EventsPage() {
             <table className="min-w-full text-left text-sm">
               <thead className="bg-muted text-xs text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Unique ID</th>
-                  <th className="px-4 py-3 font-medium">Title</th>
-                  <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium">Location</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium text-nowrap">Unique ID</th>
+                  <th className="px-4 py-3 font-medium text-nowrap">Title</th>
+                  <th className="px-4 py-3 font-medium text-nowrap">Date</th>
+                  <th className="px-4 py-3 font-medium text-nowrap">Location</th>
+                  <th className="px-4 py-3 font-medium text-nowrap">Status</th>
                   <th className="px-4 py-3 font-medium text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {data?.events.map((event) => (
                   <tr key={event._id} className="hover:bg-muted">
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground text-nowrap">
                       {event.uniqueId ?? '—'}
                     </td>
-                    <td className="px-4 py-3 font-medium text-foreground">
+                    <td className="px-4 py-3 font-medium text-foreground text-nowrap">
                       {event.uniqueId ? (
                         <Link to={`/events/${encodeURIComponent(event.uniqueId)}`} className="hover:underline">
                           {event.title}
@@ -150,7 +150,7 @@ export function EventsPage() {
                         event.title
                       )}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
+                    <td className="px-4 py-3 text-muted-foreground text-nowrap">
                       <div className="text-xs">
                         <div>{new Date(event.eventDate.start).toLocaleString()}</div>
                         <div className="text-muted-foreground">
@@ -158,7 +158,7 @@ export function EventsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
+                    <td className="px-4 py-3 text-muted-foreground text-nowrap">
                       <div className="text-xs">
                         <div className="font-medium">{event.location.venue}</div>
                         <div className="text-muted-foreground">
@@ -166,10 +166,10 @@ export function EventsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-nowrap">
                       <Badge variant={statusBadgeVariant(event.status)}>{event.status}</Badge>
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right text-nowrap">
                       {event.uniqueId ? (
                         <Button asChild size="sm" variant="outline">
                           <Link to={`/events/${encodeURIComponent(event.uniqueId)}`}>Manage</Link>
