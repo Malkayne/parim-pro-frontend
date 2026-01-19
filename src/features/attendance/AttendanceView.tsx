@@ -25,7 +25,7 @@ export function AttendanceView({ eventId }: AttendanceViewProps) {
     return (
         <div className="space-y-4">
             <Tabs value={tab} onValueChange={setTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="summary">Live & QR</TabsTrigger>
                     <TabsTrigger value="details">Detailed List</TabsTrigger>
                 </TabsList>
