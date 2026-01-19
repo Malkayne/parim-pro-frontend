@@ -84,7 +84,7 @@ function EventAttendanceCard({ event }: { event: Event }) {
             {statsLoading ? (
               <span className="h-6 w-8 animate-pulse rounded bg-muted"></span>
             ) : (
-              <span className="text-2xl font-bold">{stats?.totalCheckedIn ?? 0}</span>
+              <span className="text-2xl font-bold">{stats?.summary.checkedIn ?? 0}</span>
             )}
             <span className="text-xs text-muted-foreground">participants active</span>
           </div>
