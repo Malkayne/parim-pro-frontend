@@ -360,18 +360,19 @@ export function EventDetailsPage() {
                   </thead>
                   <tbody className="divide-y">
                     {participants?.map((p) => (
-                      <tr key={p._id} className="hover:bg-muted">
+                      <tr key={p.participantId} className="hover:bg-muted">
                         <td className="px-4 py-3">
-                          <div className="font-medium">{p.user.fullName}</div>
-                          <div className="text-xs text-muted-foreground">{p.user.mail}</div>
-                          {p.user.phoneNumber && <div className="text-xs text-muted-foreground">{p.user.phoneNumber}</div>}
+                          <div className="font-medium">{p.staff?.fullName ?? 'Unknown'}</div>
+                          <div className="text-xs text-muted-foreground">{p.staff?.email ?? 'No email'}</div>
+                          {p.staff?.phoneNumber && <div className="text-xs text-muted-foreground">{p.staff.phoneNumber}</div>}
                         </td>
-                        <td className="px-4 py-3 text-muted-foreground">{p.role.roleName}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{p.role}</td>
                         <td className="px-4 py-3">
                           <Badge variant={
                             p.status === 'approved' ? 'success' :
                               p.status === 'rejected' ? 'error' :
-                                p.status === 'withdrawn' ? 'gray' : 'warning'
+                                p.status === 'cancelled' ? 'gray' :
+                                  p.status === 'withdrawn' ? 'gray' : 'warning'
                           }>
                             {p.status}
                           </Badge>
@@ -379,13 +380,13 @@ export function EventDetailsPage() {
                         <td className="px-4 py-3 text-muted-foreground">{new Date(p.appliedAt).toLocaleDateString()}</td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex justify-end gap-2">
-                            {p.status === 'pending' && (
+                            {p.status === 'applied' && (
                               <>
                                 <Button
                                   size="sm"
                                   variant="outline"
                                   className="text-success hover:text-success hover:bg-success/10 border-success/20"
-                                  onClick={() => participantActionMutation.mutate({ id: p._id, action: 'approve' })}
+                                  onClick={() => participantActionMutation.mutate({ id: p.participantId, action: 'approve' })}
                                   disabled={participantActionMutation.isPending}
                                 >
                                   Approve
@@ -394,7 +395,7 @@ export function EventDetailsPage() {
                                   size="sm"
                                   variant="outline"
                                   className="text-error hover:text-error hover:bg-error/10 border-error/20"
-                                  onClick={() => participantActionMutation.mutate({ id: p._id, action: 'reject' })} // Add prompt for reason later
+                                  onClick={() => participantActionMutation.mutate({ id: p.participantId, action: 'reject' })} // Add prompt for reason later
                                   disabled={participantActionMutation.isPending}
                                 >
                                   Reject

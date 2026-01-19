@@ -140,9 +140,9 @@ function LiveAndQRTab({ eventId }: { eventId: string }) {
                     <div className="space-y-3">
                         {liveData?.recentCheckIns?.length ? (
                             liveData.recentCheckIns.map((checkIn) => (
-                                <div key={checkIn._id} className="flex items-center justify-between text-sm">
+                                <div key={checkIn.attendanceId} className="flex items-center justify-between text-sm">
                                     <div>
-                                        <div className="font-medium">{checkIn.user.fullName}</div>
+                                        <div className="font-medium">{checkIn.staff.fullName}</div>
                                         <div className="text-xs text-muted-foreground">
                                             {new Date(checkIn.checkInTime).toLocaleTimeString()}
                                         </div>
@@ -224,7 +224,7 @@ function DetailedListTab({ eventId }: { eventId: string }) {
 
             {isLoading ? (
                 <div className="p-8 text-center text-sm text-muted-foreground">Loading records...</div>
-            ) : (data?.data?.attendance?.length ?? 0) === 0 ? (
+            ) : (data?.data?.attendances?.length ?? 0) === 0 ? (
                 <div className="p-8 text-center text-sm text-muted-foreground">No attendance records found.</div>
             ) : (
                 <div className="overflow-x-auto">
@@ -239,11 +239,11 @@ function DetailedListTab({ eventId }: { eventId: string }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y">
-                            {data?.data?.attendance?.map((record: AttendanceRecord) => (
-                                <tr key={record._id} className="hover:bg-muted/50">
+                            {data?.data?.attendances?.map((record: AttendanceRecord) => (
+                                <tr key={record.attendanceId} className="hover:bg-muted/50">
                                     <td className="px-4 py-3">
-                                        <div className="font-medium">{record.user.fullName}</div>
-                                        <div className="text-xs text-muted-foreground">{record.user.mail}</div>
+                                        <div className="font-medium">{record.staff?.fullName ?? 'Unknown'}</div>
+                                        <div className="text-xs text-muted-foreground">{record.staff?.email ?? 'No email'}</div>
                                     </td>
                                     <td className="px-4 py-3">
                                         <Badge variant={
@@ -255,10 +255,10 @@ function DetailedListTab({ eventId }: { eventId: string }) {
                                         </Badge>
                                     </td>
                                     <td className="px-4 py-3 text-muted-foreground">
-                                        {record.checkInTime ? new Date(record.checkInTime).toLocaleString() : '—'}
+                                        {record.checkIn?.time ? new Date(record.checkIn.time).toLocaleString() : '—'}
                                     </td>
                                     <td className="px-4 py-3 text-muted-foreground">
-                                        {record.checkOutTime ? new Date(record.checkOutTime).toLocaleString() : '—'}
+                                        {record.checkOut?.time ? new Date(record.checkOut.time).toLocaleString() : '—'}
                                     </td>
                                     <td className="px-4 py-3 text-right">
                                         <div className="flex justify-end gap-2">
@@ -267,7 +267,7 @@ function DetailedListTab({ eventId }: { eventId: string }) {
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
-                                                    onClick={() => handleAction(record._id, 'CHECK_IN_OVERRIDE')}
+                                                    onClick={() => handleAction(record.attendanceId, 'CHECK_IN_OVERRIDE')}
                                                 >
                                                     Check In
                                                 </Button>
@@ -276,7 +276,7 @@ function DetailedListTab({ eventId }: { eventId: string }) {
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
-                                                    onClick={() => handleAction(record._id, 'CHECK_OUT_OVERRIDE')}
+                                                    onClick={() => handleAction(record.attendanceId, 'CHECK_OUT_OVERRIDE')}
                                                 >
                                                     Check Out
                                                 </Button>

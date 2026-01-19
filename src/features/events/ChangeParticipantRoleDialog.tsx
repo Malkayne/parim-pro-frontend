@@ -32,7 +32,7 @@ export function ChangeParticipantRoleDialog({ open, participant, roles, submitti
     } = useForm<FormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
-            roleId: participant?.role._id ?? '',
+            roleId: roles.find(r => r.roleName === participant?.role)?._id ?? '',
         },
     });
 
@@ -44,7 +44,7 @@ export function ChangeParticipantRoleDialog({ open, participant, roles, submitti
                 <div className="flex items-center justify-between border-b border-border px-4 py-3">
                     <div>
                         <div className="text-sm font-semibold">Change Role</div>
-                        <div className="text-xs text-muted-foreground">For {participant.user.fullName}</div>
+                        <div className="text-xs text-muted-foreground">For {participant.staff?.fullName ?? 'Staff'}</div>
                     </div>
                     <button
                         type="button"
@@ -64,7 +64,7 @@ export function ChangeParticipantRoleDialog({ open, participant, roles, submitti
                     onSubmit={handleSubmit(async (values) => {
                         setServerError(null);
                         try {
-                            await onSubmit(participant._id, values.roleId);
+                            await onSubmit(participant.participantId, values.roleId);
                             onClose();
                         } catch (err) {
                             setServerError(err instanceof Error ? err.message : 'Failed to change role');

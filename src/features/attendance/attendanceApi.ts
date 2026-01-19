@@ -43,10 +43,10 @@ export async function deleteQR(qrId: string) {
 export type LiveAttendanceStats = {
     totalCheckedIn: number;
     recentCheckIns: Array<{
-        _id: string;
-        user: {
+        attendanceId: string;
+        staff: {
             fullName: string;
-            mail: string;
+            email: string;
         };
         checkInTime: string;
         status: string;
@@ -65,22 +65,26 @@ export async function getLiveAttendance(eventId: string) {
 }
 
 export type AttendanceRecord = {
-    _id: string;
-    user: {
-        _id: string;
+    attendanceId: string;
+    staff: {
+        id: string;
         fullName: string;
-        mail: string;
+        email: string;
         phoneNumber?: string;
-    };
-    event: string;
-    status: 'ASSIGNED' | 'ACTIVE' | 'COMPLETED' | 'ABSENT';
-    checkInTime?: string;
-    checkOutTime?: string;
-    history: Array<{
-        action: string;
-        timestamp: string;
-        reason?: string;
-    }>;
+    } | null;
+    role: string;
+    status: 'ASSIGNED' | 'ACTIVE' | 'COMPLETED' | 'ABSENT' | 'CHECKED_IN';
+    checkIn?: {
+        time: string;
+        method: string;
+    } | null;
+    checkOut?: {
+        time: string;
+        method: string;
+    } | null;
+    duration?: number;
+    overridden?: boolean;
+    notes?: string | null;
 };
 
 type GetAttendanceDetailsResponse = {
@@ -93,7 +97,7 @@ type GetAttendanceDetailsResponse = {
         pages: number;
     };
     data: {
-        attendance: AttendanceRecord[];
+        attendances: AttendanceRecord[];
     };
 };
 

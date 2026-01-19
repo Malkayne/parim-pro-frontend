@@ -177,18 +177,19 @@ export async function deleteEventRole(roleId: string) {
   return res.data;
 }
 
-export type ParticipantStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
+export type ParticipantStatus = 'applied' | 'approved' | 'rejected' | 'withdrawn' | 'cancelled';
 
 export type Participant = {
-  _id: string;
-  user: {
-    _id: string;
+  participantId: string;
+  staff: {
+    id: string;
     fullName: string;
-    mail: string;
+    email: string;
     phoneNumber?: string;
-  };
-  event: string;
-  role: EventRole;
+    profilePicture?: string;
+  } | null;
+  role: string;
+  rolePrice: number;
   status: ParticipantStatus;
   appliedAt: string;
 };
@@ -197,13 +198,24 @@ type ListParticipantsResponse = {
   success: boolean;
   message: string;
   data: {
-    participants: Participant[];
+    eventId: string;
+    eventTitle: string;
+    summary: {
+      total: number;
+      applied: number;
+      approved: number;
+      rejected: number;
+      cancelled: number;
+    };
+    participants: Record<string, Participant[]>;
   };
 };
 
 export async function listParticipants(eventId: string) {
   const res = await http.get<ListParticipantsResponse>(`/api/events/${eventId}/participants`);
-  return res.data.data.participants;
+  const grouped = res.data.data.participants;
+  // Flatten the grouped object into a single array
+  return Object.values(grouped).flat();
 }
 
 type ParticipantActionResponse = {
