@@ -63,9 +63,9 @@ export function PaymentsView({ eventId }: PaymentsViewProps) {
     const filteredPayments = payments?.filter(p => filter === 'all' || p.status === filter) || [];
 
     const stats = {
-        total: payments?.reduce((acc, p) => acc + parseFloat(p.amount), 0) || 0,
-        paid: payments?.filter(p => p.status === 'paid').reduce((acc, p) => acc + parseFloat(p.amount), 0) || 0,
-        pending: payments?.filter(p => p.status !== 'paid').reduce((acc, p) => acc + parseFloat(p.amount), 0) || 0,
+        total: (payments ?? []).reduce((acc, p) => acc + parseFloat(p.amount), 0),
+        paid: (payments ?? []).filter(p => p.status === 'paid').reduce((acc, p) => acc + parseFloat(p.amount), 0),
+        pending: (payments ?? []).filter(p => p.status !== 'paid').reduce((acc, p) => acc + parseFloat(p.amount), 0),
     };
 
     return (
