@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import FullLayout from 'src/layouts/full/FullLayout';
 import { RequireAuth } from '../../features/auth/RequireAuth';
-import { DashboardPage } from '../../pages/DashboardPage';
+import { DashboardRouterPage } from '../../pages/DashboardRouterPage';
 import { EventsPage } from '../../pages/EventsPage';
 import { EventDetailsPage } from '../../pages/EventDetailsPage';
 import { AttendancePage } from '../../pages/AttendancePage';
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       </RequireAuth>
     ),
     children: [
-      { index: true, element: <DashboardPage /> },
+      { index: true, element: <DashboardRouterPage /> },
       { path: 'events', element: <EventsPage /> },
       { path: 'events/:uniqueId', element: <EventDetailsPage /> },
       { path: 'attendance', element: <AttendancePage /> },

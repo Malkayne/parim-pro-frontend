@@ -17,6 +17,7 @@ import {
 } from './attendanceApi';
 import { OverrideDialog } from './OverrideDialog';
 import { OverrideHistoryDialog } from './OverrideHistoryDialog';
+import { exportAttendanceCSV, exportAttendancePDF } from 'src/features/reports/reportsApi';
 
 type AttendanceViewProps = {
     eventId: string;
@@ -242,6 +243,25 @@ function DetailedListTab({ eventId }: { eventId: string }) {
                     <option value="COMPLETED">Completed</option>
                     <option value="ABSENT">Absent</option>
                 </select>
+
+                <div className="flex items-center gap-2">
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-9 px-3 gap-1"
+                        onClick={() => exportAttendanceCSV(eventId)}
+                    >
+                        Export <span className="font-bold">CSV</span>
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-9 px-3 gap-1"
+                        onClick={() => exportAttendancePDF(eventId)}
+                    >
+                        Export <span className="font-bold text-error">PDF</span>
+                    </Button>
+                </div>
             </div>
 
             {isLoading ? (
