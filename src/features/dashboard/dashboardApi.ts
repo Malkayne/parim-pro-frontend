@@ -16,6 +16,7 @@ export type DashboardStats = {
         };
         recent: Array<{
             _id: string;
+            uniqueId: string;
             title: string;
             status: string;
             eventDate: {

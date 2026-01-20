@@ -134,7 +134,7 @@ export function DashboardPage() {
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2">
                                                     <Link
-                                                        to={`/events/${event._id}`}
+                                                        to={`/events/${event.uniqueId}`}
                                                         className="font-medium hover:underline"
                                                     >
                                                         {event.title}
@@ -169,7 +169,7 @@ export function DashboardPage() {
                                             </div>
                                             <div className="ml-4">
                                                 <Button asChild variant="outline" size="sm">
-                                                    <Link to={`/events/${event._id}`}>Manage</Link>
+                                                    <Link to={`/events/${event.uniqueId}`}>Manage</Link>
                                                 </Button>
                                             </div>
                                         </div>
@@ -248,7 +248,7 @@ export function DashboardPage() {
                                 <div className="flex justify-between">
                                     <span className="text-sm font-medium">Total Amount</span>
                                     <span className="font-bold text-lg">
-                                        ${data.payments.totalAmount.toLocaleString()}
+                                        ₦{data.payments.totalAmount.toLocaleString()}
                                     </span>
                                 </div>
                             </div>

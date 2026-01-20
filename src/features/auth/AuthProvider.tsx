@@ -17,6 +17,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   loginAdmin: (input: LoginInput) => Promise<void>;
   logout: () => void;
+  updateUser: (user: AuthUser) => void;
 };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -76,14 +77,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }, []);
 
+  const updateUser = useCallback((user: AuthUser) => {
+    const next: AuthState = { ...state, user };
+    authStorage.set(next);
+    setState(next);
+  }, [state]);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user: state.user,
       isAuthenticated: Boolean(state.tokens?.accessToken),
       loginAdmin,
       logout,
+      updateUser,
     }),
-    [loginAdmin, logout, state.tokens?.accessToken, state.user]
+    [loginAdmin, logout, state.tokens?.accessToken, state.user, updateUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

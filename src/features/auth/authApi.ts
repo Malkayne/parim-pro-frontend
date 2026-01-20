@@ -66,7 +66,13 @@ export async function resetAdminPassword(input: { mail: string; otp: string; new
   return res.data;
 }
 
+
 export async function refreshToken(input: { refreshToken: string }) {
   const res = await http.post('/api/auth/refresh-token', input);
+  return res.data;
+}
+
+export async function updateAdminProfile(input: { fullName?: string; phoneNumber?: string }) {
+  const res = await http.patch('/api/auth/profile', input);
   return res.data;
 }
