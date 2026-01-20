@@ -78,7 +78,7 @@ export function SettingsPage() {
         </div>
 
         {/* Account Info/Help Card */}
-        <div className="rounded-2xl border border-border bg-card shadow-sm p-6 flex flex-col justify-center items-center text-center space-y-4">
+        {/* <div className="rounded-2xl border border-border bg-card shadow-sm p-6 flex flex-col justify-center items-center text-center space-y-4">
           <div className="rounded-full bg-blue-50 p-4 text-blue-600">
             <Icon icon="solar:info-circle-linear" width={40} />
           </div>
@@ -92,7 +92,7 @@ export function SettingsPage() {
             Change Password
           </Button>
           <p className="text-[10px] text-muted-foreground italic">Password changes coming soon</p>
-        </div>
+        </div> */}
       </div>
 
       <UpdateProfileModal
