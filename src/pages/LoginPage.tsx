@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logo from 'src/assets/images/logos/logo-icon.svg';
 
 import { useAuth } from '../features/auth/useAuth';
 import { Button } from 'src/components/ui/button';
@@ -20,6 +21,11 @@ export function LoginPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="mx-auto flex min-h-dvh max-w-md items-center px-4">
         <div className="w-full rounded-xl border border-border bg-card p-6 shadow-sm">
+          <Link to="/" className="mb-8 flex items-center justify-center gap-2 transition-opacity hover:opacity-80">
+            <img src={logo} alt="Parim Pro Logo" className="h-10 w-10" />
+            <span className="text-2xl font-bold tracking-tight">Parim Pro</span>
+          </Link>
+
           <h1 className="text-xl font-semibold">Sign in</h1>
           <p className="mt-1 text-sm text-muted-foreground">Admin access (OTP verification required)</p>
 
@@ -34,7 +40,7 @@ export function LoginPage() {
                 await loginAdmin({ mail, password });
                 const fromPathname =
                   (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ??
-                  '/';
+                  '/dashboard';
                 navigate(fromPathname, { replace: true });
               } catch (err) {
                 setError(err instanceof Error ? err.message : 'Login failed');

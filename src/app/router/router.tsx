@@ -14,6 +14,13 @@ import { RegisterAdminPage } from '../../pages/RegisterAdminPage';
 import { VerifyOtpPage } from '../../pages/VerifyOtpPage';
 import { ForgotPasswordPage } from '../../pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '../../pages/ResetPasswordPage';
+import LandingPage from '../../pages/LandingPage';
+import { useAuth } from '../../features/auth/useAuth';
+
+function RootRedirect() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />;
+}
 
 export const router = createBrowserRouter([
   {
@@ -42,13 +49,17 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
+    element: <RootRedirect />,
+  },
+  {
+    path: '/',
     element: (
       <RequireAuth>
         <FullLayout />
       </RequireAuth>
     ),
     children: [
-      { index: true, element: <DashboardRouterPage /> },
+      { path: 'dashboard', element: <DashboardRouterPage /> },
       { path: 'events', element: <EventsPage /> },
       { path: 'events/:uniqueId', element: <EventDetailsPage /> },
       { path: 'attendance', element: <AttendancePage /> },

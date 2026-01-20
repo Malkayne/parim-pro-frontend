@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import logo from 'src/assets/images/logos/logo-icon.svg';
 import type { ReactNode } from 'react';
 
 import type { AdminRole } from '../features/auth/authApi';
@@ -48,6 +49,11 @@ export function RegisterAdminPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="mx-auto flex min-h-dvh max-w-md items-center px-4">
         <div className="w-full rounded-xl border border-border bg-card p-6 shadow-sm">
+          <Link to="/" className="mb-8 flex items-center justify-center gap-2 transition-opacity hover:opacity-80">
+            <img src={logo} alt="Parim Pro Logo" className="h-10 w-10" />
+            <span className="text-2xl font-bold tracking-tight">Parim Pro</span>
+          </Link>
+
           <h1 className="text-xl font-semibold">Create admin account</h1>
           <p className="mt-1 text-sm text-muted-foreground">Register an event manager/admin</p>
 
