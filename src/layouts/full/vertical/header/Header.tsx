@@ -44,9 +44,8 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-[2] ${
-          isSticky ? 'bg-background/95 backdrop-blur shadow-sm' : 'bg-transparent'
-        }`}
+        className={`sticky top-0 z-[2] ${isSticky ? 'bg-background/95 backdrop-blur shadow-sm' : 'bg-transparent'
+          }`}
       >
         <nav className="rounded-none bg-transparent py-4 px-6 !max-w-full flex justify-between items-center border-b border-border">
           <span
@@ -78,7 +77,7 @@ export default function Header() {
               </span>
             </div>
 
-            <Messages />
+            {/* <Messages /> */}
             <Profile />
           </div>
         </nav>

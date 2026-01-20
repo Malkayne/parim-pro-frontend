@@ -46,7 +46,7 @@ export default function LandingPage() {
                 <main className="flex flex-1 flex-col justify-center max-w-2xl px-4 sm:px-0">
                     <div className="space-y-6">
                         <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur-md">
-                            Streamline Your Event Management
+                            Event Management System
                         </div>
                         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-7xl drop-shadow-2xl">
                             Precision <br />
